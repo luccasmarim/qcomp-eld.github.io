@@ -224,7 +224,7 @@ def circuit(data):
         BasisEmbedding(features=data[i], wires=range(6),do_queue=True)
     return  qml.state()
 
-data=[1,0,1,1,1,0]
+data=[[1,0,1,1,1,0]]
 
 
 # Data poderia ser também um conjunto de dados como:
@@ -329,16 +329,16 @@ $$
 Como o Qiskit não tem uma função de Amplitude Encoding, aqui escolheremos um outro vetor já normalizado e mostraremos como chegar nesse estado através de gates com a função decompose().
 
 ```
-desired_state = [
-    1 / math.sqrt(15.25) * 1.5,
-    0,
-    1 / math.sqrt(15.25) * -2,
-    1 / math.sqrt(15.25) * 3]
+desired_state = [5,6]
 
-qc = QuantumCircuit(2)
-qc.initialize(desired_state, [0,1])
+desired_state = desired_state / (np.linalg.norm(desired_state))
 
-qc.decompose().decompose().decompose().decompose().decompose().draw()
+qc = QuantumCircuit(1)
+qc.initialize(desired_state, [0])
+
+backend = Aer.get_backend('statevector_simulator')
+result = execute(qc,backend).result().get_statevector()
+result.draw('latex')
 ```
 
 #### 3.2 Paddle
